@@ -1,13 +1,21 @@
 var express = require('express');
-var app = express();
-var hbs = require('hbs');
+var exphbs = require('express-handlebars');
 
-app.set('view engine', 'html');
-app.engine('html',hbs.__express);
+var app = express();
+var hbs = exphbs.create({
+            defaultLayout: 'default',
+            layoutDir: './views/layouts',
+            partialsDir: [
+              './views/partials'
+            ]
+          });
+
+app.engine('handlebars', hbs.engine);
+app.set('view engine', 'handlebars');
 
 app.get('/', function(request, response) {
-  var scwvtitle = 'Syrian Civil War Visualization';
-   response.render('index', {title:scwvtitle});
+  var context = { title: 'Syrian Civil War Visualization' };
+  response.render('index', context);
 });
 
 app.listen(3000);
