@@ -1,19 +1,15 @@
 var express = require('express');
 var exphbs = require('express-handlebars');
 
+
 var app = express();
-var hbs = exphbs.create({
-            defaultLayout: 'default',
-            layoutDir: './views/layouts',
-            partialsDir: [
-              './views/partials'
-            ]
-          });
+var hbs = exphbs.create();
 
 var totalfatalities = require('./totalfatalities');
 
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
+app.set('views', __dirname + '/views/layouts/');
 
 app.locals.layout = 'index';
 
@@ -23,19 +19,20 @@ app.get('/', function(request, response) {
 });
 
 app.get('/totalfatalities', function(request, response) {
+  // Get the total fatalities json
   totalfatalities.getTotalFatalities(totalFatalatiesOptions, function(statusCode, result) {
-      var resultstring = JSON.stringify(result);
+      // process low vs high estimates
+      var estimates = totalfatalities.processEstimates(result.estimates);
       var context = {
         layout: 'totalfatalities',
-        title: 'Syrian Civil War Visualization',
-        data: resultstring
+        title: 'Syrian Civil War Total Fatalties Estimates',
+        estimates
       };
 
-      // I could work with the result html/json here.  I could also just return it
-      console.log("onResult: (" + statusCode + ")" + resultstring);
+      // Set the response using the status code and the context JSON
+      console.log("context: " + JSON.stringify(context));
       response.statusCode = statusCode;
       response.render('totalfatalities', context);
-      /*response.send(result);*/
   });
 });
 

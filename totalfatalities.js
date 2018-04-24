@@ -28,3 +28,16 @@ exports.getTotalFatalities = function(options, onResult)
 
     req.end();
 };
+
+/* Checks if each of the casualties lower and upper casualty estimates are
+   equal. Sets the lower bound to 0 if they are equal so that handlebars
+   templates can conditionally only display one value. */
+exports.processEstimates = function(estimates) {
+
+  for(var i = 0; i < estimates.length; i++) {
+    if(estimates[i].lowEstimate === estimates[i].highEstimate) {
+      estimates[i].lowEstimate = 0;
+    }
+  }
+  return estimates;
+}

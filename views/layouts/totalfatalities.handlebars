@@ -4,8 +4,26 @@
     {{title}}
   </h1>
 
-  <div id="fatalities-data">
-    {{data}}
+  <div class="container">
+
+    {{#each estimates}}
+    <div class="row">
+      <div class="col-sm">
+        <div class="card">
+          <div class="section">
+            Total Fatalaties:
+            {{#if lowEstimate}}
+              {{lowEstimate}}-
+            {{/if}}
+            {{highEstimate}}
+          </div>
+          <div class="section">
+            <a href="{{url}}">{{source}}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {{/each}}
   </div>
   {{>footer}}
 </html>
