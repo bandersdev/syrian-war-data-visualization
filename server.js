@@ -5,7 +5,7 @@ var exphbs = require('express-handlebars');
 var app = express();
 var hbs = exphbs.create();
 
-var totalfatalities = require('./totalfatalities');
+var totalfatalities = require('./casualties/totalfatalities');
 
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
